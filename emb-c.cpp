@@ -15,11 +15,7 @@ WiFiClient client;
 
 WebServer server(80); 
 
-String HTML = "<html><head><title>Guardian Scout</title><style>body{background-color:#f0f0f0;font-family:Arial,sans-serif;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;}input[type=\\\"text\\\"]{display:none;}#splitValues{text-align:center;margin:20px;}.value-box{display:inline-block;padding:10px;font-size:18px;color:#333;margin:5px;}.red{background-color:red;width:80px;height:40px;}.green{background-color:green;width:80px;height:40px;}.light-blue{background-color:lightblue;width:100px;height:60px;}.top-center{position:absolute;top:100px;left:50%;transform:translateX(-50%);}.middle-left{position:absolute;top:50%;left:0;transform:translateY(-50%);}.middle-right{position:absolute;top:50%;right:0;transform:translateY(-50%);}.bottom-center{position:absolute;bottom:0;left:50%;transform:translateX(-50%);}</style></head><body><input type=\\\"text\\\" value=\\\"1,1,1,0,plane\\\"><div id=\\\"splitValues\\\"></div><script>const inputElement=document.querySelector('input[type=\\\"text\\\"]');const splitValuesContainer=document.getElementById('splitValues');const inputValue=inputElement.value;const values=inputValue.split(',');splitValuesContainer.innerHTML='';values.forEach((value,index)=>{const valueBox=document.createElement('div');valueBox.textContent=value==='1'?'Yes':value==='0'?'No':value;valueBox.className=value==='1'?'value-box red':value==='0'?'value-box green':'value-box light-blue';if(index===0){valueBox.classList.add('top-center');}else if(index===1){valueBox.classList.add('middle-left');}else if(index===2){valueBox.classList.add('middle-right');}else if(index===3){valueBox.classList.add('bottom-center');}splitValuesContainer.appendChild(valueBox);});</script></body></html>";
-
-
-//String HTML = "<html><head><title>Guardian Scout</title><style>body{background-color:#f0f0f0;font-family:Arial,sans-serif;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;}input[type=\"text\"]{display:none;}#splitValues{text-align:center;margin:20px;}.value-box{display:inline-block;padding:10px;font-size:18px;color:#333;margin:5px;}.red{background-color:red;width:80px;height:40px;}.green{background-color:green;width:80px;height:40px;}.light-blue{background-color:lightblue;width:100px;height:60px;}.top-center{position:absolute;top:100px;left:50%;transform:translateX(-50%);}.middle-left{position:absolute;top:50%;left:0;transform:translateY(-50%);}.middle-right{position:absolute;top:50%;right:0;transform:translateY(-50%);}.bottom-center{position:absolute;bottom:0;left:50%;transform:translateX(-50%);}</style></head><body><input type=\"text\" value="\1,1,1,0,plane\"><div id=\"splitValues\"></div><script>const inputElement=document.querySelector('input[type=\"text\"]');const splitValuesContainer=document.getElementById('splitValues');const inputValue=inputElement.value;const values=inputValue.split(',');splitValuesContainer.innerHTML='';values.forEach((value,index)=>{const valueBox=document.createElement('div');valueBox.textContent=value==='1'?'Yes':value==='0'?'No':value;valueBox.className=value==='1'?'value-box red':value==='0'?'value-box green':'value-box light-blue';if(index===0){valueBox.classList.add('top-center');}else if(index===1){valueBox.classList.add('middle-left');}else if(index===2){valueBox.classList.add('middle-right');}else if(index===3){valueBox.classList.add('bottom-center');}splitValuesContainer.appendChild(valueBox);});</script></body></html>";
-
+String HTML = "<html><script>setTimeout(()=>{window.location.reload(1)},5);</script></html>";
 const int trigPin1 = 13;
 const int echoPin1 = 12;
 const int trigPin2 = 14;
@@ -88,6 +84,7 @@ pinMode(echoPin5, INPUT);
   delay(100); 
 }
 void loop() {
+  Serial.println(WiFi.localIP());
   server.handleClient();
 // Clears the trigPin1
 digitalWrite(trigPin1, LOW);
@@ -157,6 +154,13 @@ distanceCm5 = duration5 * SOUND_VELOCITY/2;
     {
        Serial.println("\n Some thing in in left! ");
        left=true;
+        tone(buzzer,1000);
+       delay(100);
+       noTone(buzzer);
+       delay(10);
+       tone(buzzer,1000);
+       delay(100);
+       noTone(buzzer);
     }else{
       left=false;
     }
@@ -166,6 +170,17 @@ distanceCm5 = duration5 * SOUND_VELOCITY/2;
        right=true;
     }else{
       right=false;
+        tone(buzzer,1000);
+       delay(100);
+       noTone(buzzer);
+       delay(10);
+       tone(buzzer,1000);
+       delay(100);
+       noTone(buzzer);
+       delay(10);
+       tone(buzzer,1000);
+       delay(100);
+       noTone(buzzer);
     }
     if(distanceCm5<=150 )
     {
@@ -186,8 +201,8 @@ distanceCm5 = duration5 * SOUND_VELOCITY/2;
       down="downstair";
     }else if(distanceCm1>=(height+25))
     {
-       tone(buzzer, 1000); // Send 1KHz sound signal...
-               delay(1000);        // ...for 1 sec
+       tone(buzzer, 2000); // Send 1KHz sound signal...
+               delay(2000);        // ...for 1 sec
             noTone(buzzer);
       Serial.println("\n pit ahead");
       down="pit";
@@ -200,7 +215,7 @@ distanceCm5 = duration5 * SOUND_VELOCITY/2;
 ///we have to send front,left,right,back,and down 
 Serial.println("___");
 String comma=",";
- data=front+comma+left+comma+right+comma+back+comma+down;
+ data=front+comma+right+comma+left+comma+back+comma+down;
  HTML = "<html><head><title>Guardian Scout</title><style>body{background-color:#f0f0f0;font-family:Arial,sans-serif;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;}input[type=\"text\"]{display:none;}#splitValues{text-align:center;margin:20px;}.value-box{display:inline-block;padding:10px;font-size:18px;color:#333;margin:5px;}.red{background-color:red;width:80px;height:40px;}.green{background-color:green;width:80px;height:40px;}.light-blue{background-color:lightblue;width:100px;height:60px;}.top-center{position:absolute;top:100px;left:50%;transform:translateX(-50%);}.middle-left{position:absolute;top:50%;left:0;transform:translateY(-50%);}.middle-right{position:absolute;top:50%;right:0;transform:translateY(-50%);}.bottom-center{position:absolute;bottom:0;left:50%;transform:translateX(-50%);}</style></head><body><input type=\"text\" value=\""+data+"\"><div id=\"splitValues\"></div><script>const inputElement=document.querySelector('input[type=\"text\"]');const splitValuesContainer=document.getElementById('splitValues');const inputValue=inputElement.value;const values=inputValue.split(',');splitValuesContainer.innerHTML='';values.forEach((value,index)=>{const valueBox=document.createElement('div');valueBox.textContent=value==='1'?'Yes':value==='0'?'No':value;valueBox.className=value==='1'?'value-box red':value==='0'?'value-box green':'value-box light-blue';if(index===0){valueBox.classList.add('top-center');}else if(index===1){valueBox.classList.add('middle-left');}else if(index===2){valueBox.classList.add('middle-right');}else if(index===3){valueBox.classList.add('bottom-center');}splitValuesContainer.appendChild(valueBox);});setTimeout(()=>{window.location.reload(1)},500);</script></body></html>";
 
 
